@@ -10,14 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".InfosActivity">
 
+    <!--  app:popupTheme="@style/ThemeOverlay.AppCompat.Light"-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/info_toobar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:title="Hi,Cyan!"
-
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        app:popupTheme="@style/LYJMenuStyle"
+       >
 
     </android.support.v7.widget.Toolbar>
 
