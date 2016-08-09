@@ -33,15 +33,13 @@ public class InfosActivity extends AppCompatActivity {
         initActionBar();
     }
 
-    private void initActionBar(){
-        toolbar=(Toolbar)findViewById(R.id.info_toobar);
+    private void initActionBar() {
+        toolbar = (Toolbar) findViewById(R.id.info_toobar);
         //toolbar.setLogo(R.mipmap.ic_launcher);
         toolbar.setTitle("hi,cyan!");
         //toolbar.setSubtitle("remember your any passworld!");
-
         //这个位置不能错
         setSupportActionBar(toolbar);
-
         //设置返回按钮
         toolbar.setNavigationIcon(android.R.drawable.arrow_down_float);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -55,42 +53,33 @@ public class InfosActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
         // Associate searchable configuration with the SearchView
-
-
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
-
-
-        return  true;
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_no:
                 Toast.makeText(this, "menu_no", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.menu_have:
-
                 Toast.makeText(this, "menu_have", Toast.LENGTH_SHORT).show();
                 break;
-
             default:
                 break;
         }
 //         Toast.makeText(MainActivity.this, ""+item.getItemId(), Toast.LENGTH_SHORT).show();
-
         return super.onOptionsItemSelected(item);
     }
 
     class TodayRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
-
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return null;
