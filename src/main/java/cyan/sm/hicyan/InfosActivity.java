@@ -31,6 +31,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
 
     private Dialog dialog;
 
+    private EditText etAcc;
+    private EditText etPwd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +91,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
 
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
+
+                etAcc = (EditText) view.findViewById(R.id.input_acc);
+                etPwd = (EditText) view.findViewById(R.id.input_pwd);
                 break;
             case R.id.menu_finish:
                 finish();
@@ -103,13 +109,13 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.input_dialog_confirm:
-                String acc= ((EditText)v.findViewById(R.id.input_acc)).getText().toString();
-                String pwd= ((EditText)v.findViewById(R.id.input_pwd)).getText().toString();
-                Toast.makeText(this,acc+" "+pwd,Toast.LENGTH_SHORT).show();
+                String acc = etAcc.getText().toString();
+                String pwd = etPwd.getText().toString();
+                Toast.makeText(this, acc + " " + pwd, Toast.LENGTH_SHORT).show();
                 //不管怎么样都要dismiss 所以这里不break;
             case R.id.input_dialog_cancel:
                 dialog.dismiss();
-                dialog=null;
+                dialog = null;
                 break;
         }
     }
