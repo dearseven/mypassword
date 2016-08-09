@@ -13,8 +13,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-        <!-- 窗口的背景颜色 -->
-        <item name="android:windowBackground">@android:color/white</item>
+        <!-- 设置toolbar上的弹出菜单 -->
         <item name="actionOverflowMenuStyle">@style/LYJMenuStyle</item>
 
     </style>
@@ -28,7 +27,7 @@
     <!--菜单弹出的时候不遮盖标题栏的主题-->
     <style name="LYJMenuStyle" parent="@style/Widget.AppCompat.Light.PopupMenu.Overflow">
         <item name="overlapAnchor">false</item>
-
+        <item name="android:windowBackground">@color/material_blue_grey_800</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

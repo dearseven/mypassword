@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -102,7 +103,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.input_dialog_confirm:
-
+                String acc= ((EditText)v.findViewById(R.id.input_acc)).getText().toString();
+                String pwd= ((EditText)v.findViewById(R.id.input_pwd)).getText().toString();
+                Toast.makeText(this,acc+" "+pwd,Toast.LENGTH_SHORT).show();
                 //不管怎么样都要dismiss 所以这里不break;
             case R.id.input_dialog_cancel:
                 dialog.dismiss();
