@@ -27,7 +27,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
         ex.printStackTrace();
-        if(!handleException(ex) && mDefaultHandler != null){
+        if(!handleException(ex) && mDefaultHandler != null){//基本上不会走这里！！！！
             //如果用户没有处理则让系统默认的异常处理器来处理
             mDefaultHandler.uncaughtException(thread, ex);
         }else{
