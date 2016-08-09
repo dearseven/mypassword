@@ -3,15 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <item
-            android:id="@+id/menu_no"
+            android:id="@+id/menu_add"
             android:orderInCategory="1"
             android:icon="@mipmap/ic_launcher"
-            android:title="无"/>
+            android:title="添加"/>
         <item
-            android:id="@+id/menu_have"
+            android:id="@+id/menu_finish"
             android:orderInCategory="2"
             android:icon="@mipmap/ic_launcher"
-            android:title="有"/>
+            android:title="退出"/>
 
        <!--             app:actionViewClass="android.widget.SearchView"-->
         <item android:id="@+id/search"

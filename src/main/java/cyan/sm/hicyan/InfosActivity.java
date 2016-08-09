@@ -1,5 +1,6 @@
 package cyan.sm.hicyan;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -8,22 +9,26 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 /**
- * 今日待办任务列表
+ * 用户主要列表界面
  */
-public class InfosActivity extends AppCompatActivity {
+public class InfosActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RecyclerView mRecyclerView;
 
     private Toolbar toolbar;
+
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +71,44 @@ public class InfosActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_no:
-                Toast.makeText(this, "menu_no", Toast.LENGTH_SHORT).show();
+            case R.id.menu_add:
+                //创建输入用户名和密码的窗口
+                View view = LayoutInflater.from(this).inflate(
+                        R.layout.input_dialog, null);
+                dialog = new Dialog(this, R.style.myTransparentDialogTheme);
+                dialog.setContentView(view);
+                dialog.show();
+
+                // 注册按钮的点击事件
+                Button confirm = (Button) view
+                        .findViewById(R.id.input_dialog_confirm);
+                Button cancel = (Button) view
+                        .findViewById(R.id.input_dialog_cancel);
+
+                confirm.setOnClickListener(this);
+                cancel.setOnClickListener(this);
                 break;
-            case R.id.menu_have:
-                Toast.makeText(this, "menu_have", Toast.LENGTH_SHORT).show();
+            case R.id.menu_finish:
+                finish();
                 break;
             default:
                 break;
         }
 //         Toast.makeText(MainActivity.this, ""+item.getItemId(), Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.input_dialog_confirm:
+
+                //不管怎么样都要dismiss 所以这里不break;
+            case R.id.input_dialog_cancel:
+                dialog.dismiss();
+                dialog=null;
+                break;
+        }
     }
 
     class TodayRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
