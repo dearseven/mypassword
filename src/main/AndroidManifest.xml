@@ -21,8 +21,9 @@
 
         <!-- 实现toolbar有一部分代码在AppTheme里面 -->
         <activity android:name=".InfosActivity">
-            <meta-data android:name="android.app.default_searchable"
-                android:value=".Search"/>
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".Search" />
         </activity>
 
         <provider
@@ -35,12 +36,15 @@
             android:name=".Search"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme">
-            <meta-data android:name="android.app.searchable"
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
         </activity>
+        <activity android:theme="@style/DetailActivityTheme" android:name=".DetailActivity"></activity>
     </application>
 
 </manifest>

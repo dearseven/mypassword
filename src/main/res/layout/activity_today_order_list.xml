@@ -18,6 +18,7 @@
         android:background="?attr/colorPrimary"
         android:title="Hi,Cyan!"
         app:popupTheme="@style/LYJMenuStyle"
+        android:popupTheme="@style/LYJMenuStyle"
        >
 
     </android.support.v7.widget.Toolbar>

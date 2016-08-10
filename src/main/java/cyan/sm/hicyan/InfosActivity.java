@@ -5,6 +5,7 @@ import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -64,12 +65,6 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            getWindow().setExitTransition(new Explode());
-            getWindow().setEnterTransition(new Explode());
-        }
 
         setContentView(R.layout.activity_today_order_list);
 
@@ -218,10 +213,42 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, int position) {
+        public void onBindViewHolder(MyViewHolder holder, final int position) {
             if (position < mDatas.size()) {
                 holder.one.setText(mDatas.get(position).get(Accounts.c.name.name()).charAt(0) + "");
                 holder.two.setText(mDatas.get(position).get(Accounts.c.loginname.name()));
+
+                holder.two.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String id = mDatas.get(position).get(Accounts.c.id.name());
+                        int top = v.getTop();
+                        int height = v.getHeight();
+                        int width = v.getWidth();
+                        Intent intent = new Intent(InfosActivity.this, DetailActivity.class);
+
+                        //获取高度位置
+                        int[] location = new int[2];
+                        v.getLocationOnScreen(location);
+                        int x = location[0];
+                        int y = location[1];
+                        int result = 0;
+                        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                        if (resourceId > 0) {
+                            result = getResources().getDimensionPixelSize(resourceId);
+                        }
+                        y=y-result;//减去状态栏
+
+                        intent.putExtra("id", id);
+                        intent.putExtra("top", y);
+                        intent.putExtra("width", width);
+                        intent.putExtra("height", height);
+                        //Toast.makeText(InfosActivity.this,top+" "+width+" "+height,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(InfosActivity.this,x+" "+y,Toast.LENGTH_LONG).show();
+
+                        startActivity(intent);
+                    }
+                });
             }
         }
 
