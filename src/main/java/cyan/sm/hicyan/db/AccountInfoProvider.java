@@ -22,6 +22,7 @@ public class AccountInfoProvider extends ContentProvider {
     public static final String AUTHORTY = "com.wx.hicyan.AccountInfoProvider";
 
 
+    public static final String BASE_URI = "content://" + AUTHORTY + "/AccountInfos";
     //CONTENT_URI为常量Uri; parse是将文本转换成Uri
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORTY + "/AccountInfos");
     //返回ContentProvider中表的数据类型
