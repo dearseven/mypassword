@@ -3,12 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#eeefef"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" >
+        android:layout_marginTop="20dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -23,29 +23,44 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" android:orientation="vertical">
+        android:layout_marginTop="20dp"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/input_web_name"
+            android:layout_width="match_parent"
+            android:layout_height="36sp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#F6F5F1"
+            android:gravity="left|center_vertical"
+            android:hint="服务名"
+            android:textSize="18sp" />
 
         <EditText
             android:id="@+id/input_acc"
-            android:gravity="left|center_vertical"
             android:layout_width="match_parent"
             android:layout_height="36sp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
             android:background="#F6F5F1"
-            android:hint="帐号" android:textSize="18sp" />
+            android:gravity="left|center_vertical"
+            android:hint="帐号"
+            android:textSize="18sp" />
 
         <EditText
-            android:layout_marginTop="10dp"
-            android:inputType="textPassword"
             android:id="@+id/input_pwd"
-            android:gravity="left|center_vertical"
             android:layout_width="match_parent"
             android:layout_height="36sp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginTop="10dp"
             android:background="#F6F5F1"
-            android:hint="密码" android:textSize="18sp" />
+            android:gravity="left|center_vertical"
+            android:hint="密码"
+            android:inputType="textPassword"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <RelativeLayout
@@ -53,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_marginTop="20dp" >
+        android:layout_marginTop="20dp">
 
         <Button
             android:id="@+id/input_dialog_confirm"
@@ -79,8 +94,7 @@
             android:text="blank"
             android:textColor="#FFF"
             android:textSize="14sp"
-            android:visibility="visible" >
-        </TextView>
+            android:visibility="visible"></TextView>
     </RelativeLayout>
 
 </LinearLayout>

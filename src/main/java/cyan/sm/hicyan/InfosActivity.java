@@ -2,13 +2,20 @@ package cyan.sm.hicyan;
 
 import android.app.Dialog;
 import android.app.SearchManager;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +25,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.logging.LogRecord;
+
+import cyan.sm.hicyan.db.AccountInfoProvider;
+import cyan.sm.hicyan.db.Accounts;
+import cyan.sm.hicyan.db.EnDe;
 
 
 /**
@@ -31,15 +44,31 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
 
     private Dialog dialog;
 
+    private EditText etName;
     private EditText etAcc;
     private EditText etPwd;
 
+    private ContentResolver cr=null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_today_order_list);
 
         initActionBar();
+
+        cr = InfosActivity.this.getContentResolver();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        cr.registerContentObserver(AccountInfoProvider.CONTENT_URI,true,co);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cr.unregisterContentObserver(co);
     }
 
     private void initActionBar() {
@@ -92,6 +121,7 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
                 confirm.setOnClickListener(this);
                 cancel.setOnClickListener(this);
 
+                etName = (EditText) view.findViewById(R.id.input_web_name);
                 etAcc = (EditText) view.findViewById(R.id.input_acc);
                 etPwd = (EditText) view.findViewById(R.id.input_pwd);
                 break;
@@ -105,13 +135,40 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    private final Handler h = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
+    private final ContentObserver co = new ContentObserver(h) {
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            Log.i("hicyan","ContentObserver co selfChange:"+selfChange+",uri:"+uri);
+        }
+    };
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.input_dialog_confirm:
+                String name = etName.getText().toString();
                 String acc = etAcc.getText().toString();
-                String pwd = etPwd.getText().toString();
-                Toast.makeText(this, acc + " " + pwd, Toast.LENGTH_SHORT).show();
+                String pwd = EnDe.en(etPwd.getText().toString());
+                //插入数据
+
+                Uri uri = AccountInfoProvider.CONTENT_URI;
+
+                cr.registerContentObserver(uri, false, co);
+
+                ContentValues values = new ContentValues();
+                values.put(Accounts.c.name.name(), name);
+                values.put(Accounts.c.loginname.name(), acc);
+                values.put(Accounts.c.pwd.name(), pwd);
+                cr.insert(uri, values);
+
+
                 //不管怎么样都要dismiss 所以这里不break;
             case R.id.input_dialog_cancel:
                 dialog.dismiss();

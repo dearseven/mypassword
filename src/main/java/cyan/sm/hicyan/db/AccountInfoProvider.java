@@ -9,6 +9,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 public class AccountInfoProvider extends ContentProvider {
     //定义一个UriMatcher类对象，用来匹配Uri的。
@@ -87,7 +88,6 @@ public class AccountInfoProvider extends ContentProvider {
                 Accounts.tableName,
                 "",
                 values);
-
         //---if added successfully---
         if (rowID > 0) {
             Uri _uri = ContentUris.withAppendedId(CONTENT_URI, rowID);
