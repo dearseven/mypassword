@@ -9,20 +9,24 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,6 +41,7 @@ import java.util.logging.LogRecord;
 import cyan.sm.hicyan.db.AccountInfoProvider;
 import cyan.sm.hicyan.db.Accounts;
 import cyan.sm.hicyan.db.EnDe;
+import cyan.sm.hicyan.utils.DividerItemDecoration;
 
 
 /**
@@ -59,6 +64,13 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setExitTransition(new Explode());
+            getWindow().setEnterTransition(new Explode());
+        }
+
         setContentView(R.layout.activity_today_order_list);
 
         initActionBar();
@@ -71,6 +83,10 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     private void initRecyclerView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.main_recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
         adapter = new TodayRecyclerViewAdapter();
         mRecyclerView.setAdapter(adapter);
         new MyTask().execute();
@@ -174,6 +190,10 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
                 String name = etName.getText().toString();
                 String acc = etAcc.getText().toString();
                 String pwd = EnDe.en(etPwd.getText().toString());
+                if (name.trim().equals("")) {
+                    name = "匿名";
+                }
+
                 //插入数据
                 Uri uri = AccountInfoProvider.CONTENT_URI;
                 ContentValues values = new ContentValues();
@@ -214,12 +234,12 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView one;
-        public TextView two;
+        public Button two;
 
         public MyViewHolder(View view) {
             super(view);
             one = (TextView) view.findViewById(R.id.accounts_item_layout_icon_txt);
-            two = (TextView) view.findViewById(R.id.accounts_item_layout_name_txt);
+            two = (Button) view.findViewById(R.id.accounts_item_layout_name_txt);
         }
     }
 
