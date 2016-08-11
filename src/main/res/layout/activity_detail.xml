@@ -7,12 +7,12 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cyan.sm.hicyan.DetailActivity">
+    tools:context="cyan.sm.hicyan.DetailActivity"
+    >
 
     <RelativeLayout
         android:id="@+id/detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#c2c3c4"></RelativeLayout>
-
+        android:background="@drawable/shape_background_shadow"/>
 </RelativeLayout>

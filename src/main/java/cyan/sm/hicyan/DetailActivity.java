@@ -1,5 +1,6 @@
 package cyan.sm.hicyan;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
                 Animation anim = new ScaleAnimation(1, 1, fY, 1);
                 anim.setDuration(500);
+                view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 view.startAnimation(anim);
             }
 
