@@ -14,4 +14,12 @@ public class HiCyan extends Application {
         CrashHandler ch=new CrashHandler(this);
         Thread.setDefaultUncaughtExceptionHandler(ch);
     }
+
+    public DetailActivity da=null;
+
+    public void finishDa(){
+        if(da!=null){
+            da.finish();
+        }
+    }
 }

@@ -88,6 +88,8 @@ public class DetailActivity extends AppCompatActivity {
                 anim.setDuration(500);
                 view.setBackgroundColor(Color.parseColor("#FFFFFF"));
                 view.startAnimation(anim);
+                HiCyan app = (HiCyan) getApplication();
+                app.da=DetailActivity.this;
             }
 
             @Override

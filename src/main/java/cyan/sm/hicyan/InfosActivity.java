@@ -6,6 +6,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -91,6 +92,20 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
         cr.registerContentObserver(AccountInfoProvider.CONTENT_URI, true, co);
+
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        SharedPreferences sp = getSharedPreferences("lock", MODE_PRIVATE);
+        if (System.currentTimeMillis() - sp.getLong("time", 0) > 5000) {
+            Intent it = new Intent(this, LaunchActivity.class);
+            startActivity(it);
+            finish();
+        }
+        // Toast.makeText(this,sp.getLong("time",0)+"",Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -159,7 +174,6 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
             default:
                 break;
         }
-//         Toast.makeText(MainActivity.this, ""+item.getItemId(), Toast.LENGTH_SHORT).show();
         return super.onOptionsItemSelected(item);
     }
 
@@ -237,7 +251,7 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
                         if (resourceId > 0) {
                             result = getResources().getDimensionPixelSize(resourceId);
                         }
-                        y=y-result;//减去状态栏
+                        y = y - result;//减去状态栏
 
                         intent.putExtra("id", id);
                         intent.putExtra("top", y);
@@ -247,10 +261,10 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
                         //Toast.makeText(InfosActivity.this,x+" "+y,Toast.LENGTH_LONG).show();
 
                         //获取数据然后传过去
-                        Map<String,String>m=mDatas.get(position);
-                        intent.putExtra("name",m.get(Accounts.c.name.name()));
-                        intent.putExtra("loginname",m.get(Accounts.c.loginname.name()));
-                        intent.putExtra("pwd",m.get(Accounts.c.pwd.name()));
+                        Map<String, String> m = mDatas.get(position);
+                        intent.putExtra("name", m.get(Accounts.c.name.name()));
+                        intent.putExtra("loginname", m.get(Accounts.c.loginname.name()));
+                        intent.putExtra("pwd", m.get(Accounts.c.pwd.name()));
 
                         startActivity(intent);
                     }
