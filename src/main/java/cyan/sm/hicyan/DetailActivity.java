@@ -42,8 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         anim(view, top, height, width);
     }
 
-    void anim(final View view, int top, int height, int width) {
-        //记住括号哦，我这里调试了一小时
+    private void anim(final View view, int top, int height, int width) {
 //        float delta = ((float) width) / ((float) height);
 //        Log.i("hicyan anim", "delta:" + delta);
 //        float fromDelta, toDelta, fromY, toY;
