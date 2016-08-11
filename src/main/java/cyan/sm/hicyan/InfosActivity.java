@@ -246,6 +246,12 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
                         //Toast.makeText(InfosActivity.this,top+" "+width+" "+height,Toast.LENGTH_LONG).show();
                         //Toast.makeText(InfosActivity.this,x+" "+y,Toast.LENGTH_LONG).show();
 
+                        //获取数据然后传过去
+                        Map<String,String>m=mDatas.get(position);
+                        intent.putExtra("name",m.get(Accounts.c.name.name()));
+                        intent.putExtra("loginname",m.get(Accounts.c.loginname.name()));
+                        intent.putExtra("pwd",m.get(Accounts.c.pwd.name()));
+
                         startActivity(intent);
                     }
                 });

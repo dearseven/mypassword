@@ -7,12 +7,55 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="cyan.sm.hicyan.DetailActivity"
-    >
+    tools:context="cyan.sm.hicyan.DetailActivity">
 
     <RelativeLayout
         android:id="@+id/detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/shape_background_shadow"/>
+        android:background="@drawable/shape_background_shadow">
+
+        <TextView
+            android:id="@+id/detail_show_name"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_above="@+id/detail_center_above"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="name" />
+
+        <View
+            android:id="@+id/detail_center_above"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/detail_center"
+            android:layout_marginBottom="20dp" />
+
+        <View
+            android:id="@+id/detail_center"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/detail_show_loginname"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@+id/detail_show_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="loginname" />
+
+        <TextView
+            android:id="@+id/detail_show_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@+id/detail_show_loginname"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="pwd" />
+
+    </RelativeLayout>
 </RelativeLayout>

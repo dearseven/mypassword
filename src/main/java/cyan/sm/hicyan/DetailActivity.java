@@ -9,7 +9,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import cyan.sm.hicyan.db.EnDe;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -22,6 +25,19 @@ public class DetailActivity extends AppCompatActivity {
         int width = getIntent().getIntExtra("width", 0);
         int height = getIntent().getIntExtra("height", 0);
         //Toast.makeText(DetailActivity.this, "why:" + top + " " + width + " " + height, Toast.LENGTH_LONG).show();
+
+
+        String name=getIntent().getStringExtra("name");
+        String loginname=getIntent().getStringExtra("loginname");
+        String pwd= EnDe.de (getIntent().getStringExtra("pwd"));
+
+        TextView showName=(TextView)findViewById(R.id.detail_show_name);
+        TextView showLoginName=(TextView)findViewById(R.id.detail_show_loginname);
+        TextView showPwd=(TextView)findViewById(R.id.detail_show_pwd);
+
+        showName.setText(name);
+        showLoginName.setText(loginname);
+        showPwd.setText(pwd);
 
         anim(view, top, height, width);
     }
