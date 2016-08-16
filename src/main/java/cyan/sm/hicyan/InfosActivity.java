@@ -11,7 +11,6 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -21,24 +20,23 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.LogRecord;
 
 import cyan.sm.hicyan.db.AccountInfoProvider;
 import cyan.sm.hicyan.db.Accounts;
@@ -61,7 +59,20 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     private ContentResolver cr = null;
 
     private List<Map<String, String>> mDatas = new ArrayList<Map<String, String>>();
-    TodayRecyclerViewAdapter adapter = null;
+
+    /**
+     * adapter
+     */
+    public TodayRecyclerViewAdapter adapter = null;
+
+    /**
+     * 实现ItemTouchHelper.Callback
+     */
+    RecyclerViewItemTouchCallBck recyclerViewItemTouchCallBck = null;
+    /**
+     * ItemTouchHelper处理RecyclerView的拖动删除和拖动交换item位置
+     */
+    ItemTouchHelper itemTouchHelper = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +87,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         initRecyclerView();
     }
 
+    /**
+     * 对recyclerview做一些基本的初始化，以及获取数据
+     */
     private void initRecyclerView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.main_recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,6 +99,11 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
 
         adapter = new TodayRecyclerViewAdapter();
         mRecyclerView.setAdapter(adapter);
+
+        recyclerViewItemTouchCallBck = new RecyclerViewItemTouchCallBck();
+        itemTouchHelper = new ItemTouchHelper(recyclerViewItemTouchCallBck);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
         new MyTask().execute();
     }
 
@@ -92,8 +111,6 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
     protected void onStart() {
         super.onStart();
         cr.registerContentObserver(AccountInfoProvider.CONTENT_URI, true, co);
-
-
     }
 
     @Override
@@ -114,6 +131,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         cr.unregisterContentObserver(co);
     }
 
+    /**
+     * 初始化toolbar
+     */
     private void initActionBar() {
         toolbar = (Toolbar) findViewById(R.id.info_toobar);
         //toolbar.setLogo(R.mipmap.ic_launcher);
@@ -184,6 +204,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         }
     };
 
+    /**
+     * 数据库采用ContentProvide 这里注册一个数据是为了获取服务器更新
+     */
     private final ContentObserver co = new ContentObserver(h) {
         @Override
         public void onChange(boolean selfChange, Uri uri) {
@@ -218,6 +241,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * recyclerview的适配器
+     */
     class TodayRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -227,15 +253,30 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         }
 
         @Override
-        public void onBindViewHolder(MyViewHolder holder, final int position) {
+        public void onBindViewHolder(MyViewHolder holder, int position) {
             if (position < mDatas.size()) {
+                final MyViewHolder f_Holder = holder;
+                final int f_Position = position;
+
                 holder.one.setText(mDatas.get(position).get(Accounts.c.name.name()).charAt(0) + "");
                 holder.two.setText(mDatas.get(position).get(Accounts.c.loginname.name()));
+
+                holder.one.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        //如果按下
+                        if (/*MotionEventCompat.getActionMasked(event)*/event.getAction() == MotionEvent.ACTION_DOWN) {
+                            itemTouchHelper.startDrag(f_Holder);
+                        }
+                        return false;
+                    }
+                });
+
 
                 holder.two.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String id = mDatas.get(position).get(Accounts.c.id.name());
+                        String id = mDatas.get(f_Position).get(Accounts.c.id.name());
                         int top = v.getTop();
                         int height = v.getHeight();
                         int width = v.getWidth();
@@ -261,7 +302,7 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
                         //Toast.makeText(InfosActivity.this,x+" "+y,Toast.LENGTH_LONG).show();
 
                         //获取数据然后传过去
-                        Map<String, String> m = mDatas.get(position);
+                        Map<String, String> m = mDatas.get(f_Position);
                         intent.putExtra("name", m.get(Accounts.c.name.name()));
                         intent.putExtra("loginname", m.get(Accounts.c.loginname.name()));
                         intent.putExtra("pwd", m.get(Accounts.c.pwd.name()));
@@ -276,8 +317,38 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         public int getItemCount() {
             return mDatas.size();
         }
+
+        /**
+         * 当触发删除的时候调用这个方法
+         *
+         * @param fromPosition
+         * @param toPosition
+         * @return
+         */
+        public boolean onItemMove(int fromPosition, int toPosition) {
+            //交换mItems数据的位置
+            Collections.swap(mDatas, fromPosition, toPosition);
+            //交换RecyclerView列表中item的位置
+            notifyItemMoved(fromPosition, toPosition);
+            return true;
+        }
+
+        /**
+         * 当触发交换数据（调整位置的时候触发这个方法）
+         *
+         * @param position
+         */
+        public void onItemDismiss(int position) {
+            //删除mItems数据
+            mDatas.remove(position);
+            //删除RecyclerView列表对应item
+            notifyItemRemoved(position);
+        }
     }
 
+    /**
+     * recyclerview的viewholder
+     */
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView one;
@@ -290,6 +361,9 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * 异步任务，获取数据
+     */
     public class MyTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected void onPreExecute() {
@@ -321,4 +395,56 @@ public class InfosActivity extends AppCompatActivity implements View.OnClickList
             //super.onPostExecute(aVoid);
         }
     }
+
+    /**
+     * RecyclerView的item的拖拽功能，包括删除和调整位置!
+     */
+    public class RecyclerViewItemTouchCallBck extends ItemTouchHelper.Callback {
+        /**
+         * 这个方法是用来设置我们拖动的方向以及侧滑的方向的
+         */
+        @Override
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            //如果是ListView样式的RecyclerView
+            if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+                //设置拖拽方向为上下
+                final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+                //设置侧滑方向为从左到右和从右到左都可以
+                final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+                //将方向参数设置进去
+                return makeMovementFlags(dragFlags, swipeFlags);
+            } else {//如果是GridView样式的RecyclerView
+                //设置拖拽方向为上下左右
+                final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN |
+                        ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+                //不支持侧滑
+                final int swipeFlags = 0;
+                return makeMovementFlags(dragFlags, swipeFlags);
+            }
+        }
+
+        /**
+         * 当我们拖动item时会回调此方法
+         */
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            //如果两个item不是一个类型的，我们让他不可以拖拽
+            if (viewHolder.getItemViewType() != target.getItemViewType()) {
+                return false;
+            }
+            //回调adapter中的onItemMove方法
+            InfosActivity.this.adapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            return true;
+        }
+
+        /**
+         * 当我们侧滑item时会回调此方法
+         */
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+            InfosActivity.this.adapter.onItemDismiss(viewHolder.getAdapterPosition());
+        }
+    }
+
+
 }
