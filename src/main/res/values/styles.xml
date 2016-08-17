@@ -5,9 +5,9 @@
         <!-- Customize your theme here. -->
         <item name="android:windowIsTranslucent">true</item>
 
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/green</item>
 
         <!-- 下面两个用来实现toolbar-->
         <item name="windowActionBar">false</item>
@@ -56,4 +56,7 @@
         <!--无进入动画-->
         <item name="android:windowAnimationStyle">@null</item>
     </style>
+
+    <color name="black">#000000</color>
+    <color name="green">#00ff00</color>
 </resources>
